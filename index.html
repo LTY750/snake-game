@@ -12,6 +12,44 @@
         :root {
             --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
             --font-mono: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+
+            /* 主题变量（默认 emerald） */
+            --bg-1: #1a1a2e;
+            --bg-2: #16213e;
+            --bg-3: #0f3460;
+            --accent: #4CAF50;
+            --accent-light: #8BC34A;
+            --accent-dark: #2E7D32;
+            --danger: #ff6b6b;
+            --glow-1: #4CAF50;
+            --glow-2: #ff6b6b;
+            --canvas-1: #0d1b2a;
+            --canvas-2: #1b263b;
+        }
+
+        body[data-theme="sunset"] {
+            --bg-1: #2d1b4e; --bg-2: #4a1942; --bg-3: #7a2048;
+            --accent: #ff9a44; --accent-light: #ffc371; --accent-dark: #c97119;
+            --danger: #ff6b9d; --glow-1: #ff9a44; --glow-2: #ff6b9d;
+            --canvas-1: #1a0f2a; --canvas-2: #2a1535;
+        }
+        body[data-theme="ocean"] {
+            --bg-1: #0a2540; --bg-2: #0e3b5c; --bg-3: #0a4d6e;
+            --accent: #00d4ff; --accent-light: #7df9ff; --accent-dark: #0099cc;
+            --danger: #ff6b9d; --glow-1: #00d4ff; --glow-2: #0099ff;
+            --canvas-1: #051a2a; --canvas-2: #0a2540;
+        }
+        body[data-theme="neon"] {
+            --bg-1: #0f0524; --bg-2: #1a0f3e; --bg-3: #2d0b4e;
+            --accent: #b537f2; --accent-light: #e57bff; --accent-dark: #7a1fa6;
+            --danger: #ff0080; --glow-1: #b537f2; --glow-2: #00ffff;
+            --canvas-1: #0a0418; --canvas-2: #170a30;
+        }
+        body[data-theme="cherry"] {
+            --bg-1: #1a0a14; --bg-2: #3d0e2d; --bg-3: #5a1547;
+            --accent: #ff4081; --accent-light: #ff80ab; --accent-dark: #c2185b;
+            --danger: #ffeb3b; --glow-1: #ff4081; --glow-2: #ffeb3b;
+            --canvas-1: #1a0612; --canvas-2: #2d0a20;
         }
 
         body {
@@ -20,11 +58,12 @@
             justify-content: center;
             align-items: center;
             font-family: var(--font-sans);
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
             overflow-x: hidden;
             color: #fff;
             position: relative;
             padding: 20px;
+            transition: background 0.6s ease;
         }
 
         body::before, body::after {
@@ -37,9 +76,10 @@
             opacity: 0.4;
             z-index: 0;
             animation: float 10s ease-in-out infinite;
+            transition: background 0.6s ease;
         }
-        body::before { background: #4CAF50; top: -100px; left: -100px; }
-        body::after { background: #ff6b6b; bottom: -100px; right: -100px; animation-delay: -5s; }
+        body::before { background: var(--glow-1); top: -100px; left: -100px; }
+        body::after { background: var(--glow-2); bottom: -100px; right: -100px; animation-delay: -5s; }
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0); }
@@ -54,6 +94,7 @@
             flex-wrap: wrap;
             z-index: 1;
             position: relative;
+            transition: gap 0.4s ease;
         }
 
         .glass {
@@ -76,7 +117,7 @@
             font-family: var(--font-mono);
             font-size: 28px;
             font-weight: 900;
-            background: linear-gradient(135deg, #4CAF50, #8BC34A, #FFC107);
+            background: linear-gradient(135deg, var(--accent), var(--accent-light), #FFC107);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -93,10 +134,7 @@
                         inset 0 0 0 2px rgba(255, 255, 255, 0.1);
         }
 
-        #gameCanvas {
-            display: block;
-            background: #0d1b2a;
-        }
+        #gameCanvas { display: block; background: var(--canvas-1); }
 
         .canvas-overlay {
             position: absolute;
@@ -136,6 +174,34 @@
             min-width: 240px;
         }
 
+        /* 主题选择器 */
+        .theme-picker {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            justify-content: center;
+        }
+        .theme-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.2s;
+            position: relative;
+        }
+        .theme-dot:hover { transform: scale(1.15); }
+        .theme-dot.active {
+            border-color: #fff;
+            transform: scale(1.2);
+            box-shadow: 0 0 12px currentColor;
+        }
+        .theme-dot[data-theme="emerald"] { background: linear-gradient(135deg, #4CAF50, #ff6b6b); color: #4CAF50; }
+        .theme-dot[data-theme="sunset"]  { background: linear-gradient(135deg, #ff9a44, #ff6b9d); color: #ff9a44; }
+        .theme-dot[data-theme="ocean"]   { background: linear-gradient(135deg, #00d4ff, #0099ff); color: #00d4ff; }
+        .theme-dot[data-theme="neon"]    { background: linear-gradient(135deg, #b537f2, #00ffff); color: #b537f2; }
+        .theme-dot[data-theme="cherry"]  { background: linear-gradient(135deg, #ff4081, #ffeb3b); color: #ff4081; }
+
         .score-box { width: 100%; text-align: center; }
 
         .score-label {
@@ -151,7 +217,7 @@
             font-family: var(--font-mono);
             font-size: 48px;
             font-weight: 900;
-            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -188,7 +254,7 @@
             font-weight: 700;
             letter-spacing: 2px;
             color: #fff;
-            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             border: none;
             border-radius: 30px;
             cursor: pointer;
@@ -253,7 +319,6 @@
         #right { grid-column: 3; grid-row: 2; }
         #down { grid-column: 2; grid-row: 3; }
 
-        /* 游戏中放大方向键 */
         body.playing .control-btn {
             width: 80px;
             height: 80px;
@@ -273,11 +338,14 @@
             transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
-        /* 游戏中隐藏排行榜 */
+        /* 游戏中：从布局中移除排行榜，让游戏区居中 */
         body.playing .history-panel {
             opacity: 0;
-            transform: translateX(30px) scale(0.95);
+            transform: translateX(40px) scale(0.9);
             pointer-events: none;
+            position: absolute;
+            right: -20px;
+            top: 50%;
         }
 
         .history-header {
@@ -382,7 +450,7 @@
         .history-score {
             font-family: var(--font-mono);
             font-weight: 700;
-            color: #8BC34A;
+            color: var(--accent-light);
             font-size: 15px;
         }
 
@@ -435,11 +503,12 @@
                 font-size: 28px;
             }
             body.playing .controls { width: 240px; }
+            body.playing .history-panel { display: none; }
         }
     </style>
 </head>
 
-<body>
+<body data-theme="emerald">
     <div class="game-container">
         <div class="game-panel glass">
             <div class="game-title">🐍 SNAKE GAME</div>
@@ -450,6 +519,13 @@
         </div>
 
         <div class="control-panel glass">
+            <div class="theme-picker" id="themePicker">
+                <div class="theme-dot active" data-theme="emerald" title="翡翠"></div>
+                <div class="theme-dot" data-theme="sunset" title="日落"></div>
+                <div class="theme-dot" data-theme="ocean" title="海洋"></div>
+                <div class="theme-dot" data-theme="neon" title="霓虹"></div>
+                <div class="theme-dot" data-theme="cherry" title="樱桃"></div>
+            </div>
             <div class="score-box">
                 <div class="score-label">SCORE</div>
                 <div class="score-value" id="score">0</div>
@@ -487,16 +563,17 @@
         const clearBtn = document.getElementById('clearBtn');
         const overlay = document.getElementById('overlay');
         const toast = document.getElementById('toast');
+        const themePicker = document.getElementById('themePicker');
 
         const gridSize = 18;
         const tileCount = canvas.width / gridSize;
 
-        // 速度配置
-        const STEP_INITIAL = 200;   // 初始步进时间（ms），数字越大越慢
-        const STEP_MIN = 70;        // 最快速度上限
-        const SPEED_STEP = 6;       // 每吃一个食物加速多少 ms
+        const STEP_INITIAL = 200;
+        const STEP_MIN = 70;
+        const SPEED_STEP = 6;
 
         const HISTORY_KEY = 'snake_history_v2';
+        const THEME_KEY = 'snake_theme';
         const MAX_HISTORY = 10;
 
         let snake, prevSnake, food, dx, dy, nextDx, nextDy, score;
@@ -504,6 +581,26 @@
         let gameRunning = false;
         let lastStepTime = 0;
 
+        // 读取 CSS 变量颜色，供 Canvas 使用
+        function cssVar(name) {
+            return getComputedStyle(document.body).getPropertyValue(name).trim();
+        }
+
+        // ---------- 主题 ----------
+        function applyTheme(theme) {
+            document.body.dataset.theme = theme;
+            localStorage.setItem(THEME_KEY, theme);
+            themePicker.querySelectorAll('.theme-dot').forEach(d => {
+                d.classList.toggle('active', d.dataset.theme === theme);
+            });
+        }
+        themePicker.addEventListener('click', e => {
+            const dot = e.target.closest('.theme-dot');
+            if (dot) applyTheme(dot.dataset.theme);
+        });
+        applyTheme(localStorage.getItem(THEME_KEY) || 'emerald');
+
+        // ---------- Toast ----------
         function showToast(msg, isError = false) {
             toast.textContent = msg;
             toast.classList.toggle('error', isError);
@@ -511,6 +608,7 @@
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
+        // ---------- 历史记录 ----------
         function loadHistory() {
             try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
             catch { return []; }
@@ -599,8 +697,8 @@
                 score += 10;
                 updateScore(true);
                 generateFood();
-                prevSnake.unshift({ ...prevSnake[0] });
-                // 加速
+                // 关键修复：新尾部的 prev 设为其当前位置（不动），避免插值跳变
+                prevSnake.push({ ...snake[snake.length - 1] });
                 stepInterval = Math.max(STEP_MIN, stepInterval - SPEED_STEP);
                 updateSpeedIndicator();
             } else {
@@ -633,10 +731,24 @@
             }
         }
 
+        // 工具：把 hex 转为 hsl 数值（粗略）
+        function getThemeColors() {
+            return {
+                accent: cssVar('--accent') || '#4CAF50',
+                accentLight: cssVar('--accent-light') || '#8BC34A',
+                accentDark: cssVar('--accent-dark') || '#2E7D32',
+                danger: cssVar('--danger') || '#ff6b6b',
+                canvas1: cssVar('--canvas-1') || '#0d1b2a',
+                canvas2: cssVar('--canvas-2') || '#1b263b',
+            };
+        }
+
         function draw(t) {
+            const c = getThemeColors();
+
             const bg = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            bg.addColorStop(0, '#0d1b2a');
-            bg.addColorStop(1, '#1b263b');
+            bg.addColorStop(0, c.canvas1);
+            bg.addColorStop(1, c.canvas2);
             ctx.fillStyle = bg;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             drawGrid();
@@ -646,15 +758,15 @@
             const pulse = 1 + Math.sin(performance.now() / 200) * 0.1;
 
             const glow = ctx.createRadialGradient(fx, fy, 0, fx, fy, gridSize * 1.5);
-            glow.addColorStop(0, 'rgba(255, 107, 107, 0.4)');
-            glow.addColorStop(1, 'rgba(255, 107, 107, 0)');
+            glow.addColorStop(0, c.danger + '66');
+            glow.addColorStop(1, c.danger + '00');
             ctx.fillStyle = glow;
             ctx.fillRect(fx - gridSize * 1.5, fy - gridSize * 1.5, gridSize * 3, gridSize * 3);
 
             const grad = ctx.createRadialGradient(fx - 2, fy - 2, 1, fx, fy, gridSize / 2);
-            grad.addColorStop(0, '#ffcccc');
-            grad.addColorStop(0.4, '#ff6b6b');
-            grad.addColorStop(1, '#c0392b');
+            grad.addColorStop(0, '#ffffff');
+            grad.addColorStop(0.4, c.danger);
+            grad.addColorStop(1, c.accentDark);
             ctx.fillStyle = grad;
             ctx.beginPath();
             ctx.arc(fx, fy, (gridSize / 2 - 1) * pulse, 0, Math.PI * 2);
@@ -671,13 +783,12 @@
 
                 const g = ctx.createLinearGradient(x, y, x + gridSize, y + gridSize);
                 if (isHead) {
-                    g.addColorStop(0, '#8BC34A');
-                    g.addColorStop(1, '#558B2F');
+                    g.addColorStop(0, c.accentLight);
+                    g.addColorStop(1, c.accentDark);
                 } else {
-                    const light = `hsl(100, 60%, ${35 + progress * 15}%)`;
-                    const dark = `hsl(100, 60%, ${20 + progress * 10}%)`;
-                    g.addColorStop(0, light);
-                    g.addColorStop(1, dark);
+                    g.addColorStop(0, c.accentLight);
+                    g.addColorStop(1, c.accent);
+                    ctx.globalAlpha = 0.55 + progress * 0.45;
                 }
                 ctx.fillStyle = g;
                 ctx.beginPath();
@@ -685,9 +796,10 @@
                 if (ctx.roundRect) ctx.roundRect(x + 1, y + 1, gridSize - 2, gridSize - 2, r);
                 else ctx.rect(x + 1, y + 1, gridSize - 2, gridSize - 2);
                 ctx.fill();
+                ctx.globalAlpha = 1;
 
                 if (isHead) {
-                    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+                    ctx.fillStyle = 'rgba(255,255,255,0.25)';
                     ctx.beginPath();
                     if (ctx.roundRect) ctx.roundRect(x + 3, y + 3, gridSize - 6, 4, 2);
                     ctx.fill();
