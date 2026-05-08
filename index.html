@@ -172,6 +172,14 @@
             font-family: var(--font-mono);
         }
 
+        .speed-indicator {
+            font-size: 11px;
+            color: rgba(135, 206, 250, 0.8);
+            margin-top: 4px;
+            letter-spacing: 1px;
+            font-family: var(--font-mono);
+        }
+
         .start-btn {
             margin: 20px 0;
             padding: 14px 36px;
@@ -209,6 +217,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             width: 200px;
+            transition: all 0.3s ease;
         }
 
         .control-btn {
@@ -221,7 +230,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 16px;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all 0.3s ease;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -244,11 +253,31 @@
         #right { grid-column: 3; grid-row: 2; }
         #down { grid-column: 2; grid-row: 3; }
 
+        /* 游戏中放大方向键 */
+        body.playing .control-btn {
+            width: 80px;
+            height: 80px;
+            font-size: 32px;
+            border-radius: 20px;
+        }
+        body.playing .controls {
+            width: 264px;
+            gap: 12px;
+        }
+
         .history-panel {
             padding: 24px;
             width: 260px;
             display: flex;
             flex-direction: column;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        /* 游戏中隐藏排行榜 */
+        body.playing .history-panel {
+            opacity: 0;
+            transform: translateX(30px) scale(0.95);
+            pointer-events: none;
         }
 
         .history-header {
@@ -400,6 +429,12 @@
             .game-title { font-size: 22px; }
             .score-value { font-size: 36px; }
             .history-panel { width: 100%; max-width: 360px; }
+            body.playing .control-btn {
+                width: 72px;
+                height: 72px;
+                font-size: 28px;
+            }
+            body.playing .controls { width: 240px; }
         }
     </style>
 </head>
@@ -419,6 +454,7 @@
                 <div class="score-label">SCORE</div>
                 <div class="score-value" id="score">0</div>
                 <div class="best-score" id="best">🏆 BEST: 0</div>
+                <div class="speed-indicator" id="speed">⚡ SPEED: 1.0x</div>
             </div>
             <button class="start-btn" id="startBtn">START</button>
             <div class="controls">
@@ -445,6 +481,7 @@
         const ctx = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
         const bestElement = document.getElementById('best');
+        const speedElement = document.getElementById('speed');
         const startBtn = document.getElementById('startBtn');
         const historyList = document.getElementById('historyList');
         const clearBtn = document.getElementById('clearBtn');
@@ -453,11 +490,17 @@
 
         const gridSize = 18;
         const tileCount = canvas.width / gridSize;
-        const STEP_INTERVAL = 120;
+
+        // 速度配置
+        const STEP_INITIAL = 200;   // 初始步进时间（ms），数字越大越慢
+        const STEP_MIN = 70;        // 最快速度上限
+        const SPEED_STEP = 6;       // 每吃一个食物加速多少 ms
+
         const HISTORY_KEY = 'snake_history_v2';
         const MAX_HISTORY = 10;
 
         let snake, prevSnake, food, dx, dy, nextDx, nextDy, score;
+        let stepInterval = STEP_INITIAL;
         let gameRunning = false;
         let lastStepTime = 0;
 
@@ -520,6 +563,11 @@
             }
         });
 
+        function updateSpeedIndicator() {
+            const ratio = STEP_INITIAL / stepInterval;
+            speedElement.textContent = `⚡ SPEED: ${ratio.toFixed(1)}x`;
+        }
+
         function init() {
             snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
             prevSnake = snake.map(s => ({ ...s }));
@@ -527,7 +575,9 @@
             dx = 1; dy = 0;
             nextDx = 1; nextDy = 0;
             score = 0;
+            stepInterval = STEP_INITIAL;
             updateScore();
+            updateSpeedIndicator();
         }
 
         function step() {
@@ -550,6 +600,9 @@
                 updateScore(true);
                 generateFood();
                 prevSnake.unshift({ ...prevSnake[0] });
+                // 加速
+                stepInterval = Math.max(STEP_MIN, stepInterval - SPEED_STEP);
+                updateSpeedIndicator();
             } else {
                 snake.pop();
             }
@@ -661,12 +714,12 @@
         function loop(now) {
             if (!gameRunning) return;
             if (!lastStepTime) lastStepTime = now;
-            while (now - lastStepTime >= STEP_INTERVAL) {
+            while (now - lastStepTime >= stepInterval) {
                 step();
-                lastStepTime += STEP_INTERVAL;
+                lastStepTime += stepInterval;
                 if (!gameRunning) { draw(1); return; }
             }
-            const t = Math.min(1, (now - lastStepTime) / STEP_INTERVAL);
+            const t = Math.min(1, (now - lastStepTime) / stepInterval);
             draw(t);
             requestAnimationFrame(loop);
         }
@@ -676,6 +729,7 @@
             startBtn.textContent = 'RESTART';
             overlay.querySelector('span').textContent = `💀 得分 ${score}`;
             overlay.classList.add('show');
+            document.body.classList.remove('playing');
             const isNewBest = addHistory(score);
             setTimeout(() => {
                 if (isNewBest && score > 0) showToast('🎉 新纪录！');
@@ -719,6 +773,7 @@
             lastStepTime = 0;
             overlay.classList.remove('show');
             startBtn.textContent = 'RESTART';
+            document.body.classList.add('playing');
             requestAnimationFrame(loop);
         });
 
