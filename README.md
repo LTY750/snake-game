@@ -1,76 +1,79 @@
-# snake-game
-贪吃蛇游戏
 <div align="center">
 
 # 🐍 Snake Game
 
-**一个精致的贪吃蛇网页游戏 — 零依赖，单文件，开箱即玩**
+### 一个精致的原生 Web 贪吃蛇小游戏
 
-[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
-[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+基于 **HTML5 Canvas + CSS3 + Vanilla JavaScript** 构建  
+支持 **多模式玩法、主题切换、排行榜、成就系统、移动端滑动控制**
 
-[🎮 在线试玩](#-快速开始) · [✨ 功能特性](#-功能特性) · [🎨 主题预览](#-主题预览) · [🛠 技术细节](#-技术细节)
+<br>
+
+![HTML5](https://img.shields.io/badge/HTML5-Canvas-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-UI-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 </div>
 
 ---
 
-## ✨ 功能特性
+## 📖 项目简介
 
-### 🎮 游戏玩法
-- **经典贪吃蛇** — 吃食物增长身体，撞墙或撞自己则游戏结束
-- **渐进加速** — 每吃一个食物速度提升，最高可达 2.9x
-- **平滑插值动画** — 蛇的移动在帧间插值，告别格子跳跃感
-- **方向输入队列** — 支持快速连续转向，不会吞键
+这是一个用 **原生前端技术** 实现的贪吃蛇游戏项目。  
+它不仅保留了经典玩法，还加入了更适合展示和体验的增强功能：
 
-### 🎨 视觉体验
-- **5 套主题配色** — 翡翠 / 日落 / 海洋 / 霓虹 / 樱桃，一键切换
-- **毛玻璃 UI** — `backdrop-filter` 磨砂质感面板
-- **动态光晕背景** — 浮动模糊光球随主题变色
-- **Canvas 渲染** — 渐变蛇身、脉冲食物、蛇眼跟随方向转动
+- 进入页面先 **选择游戏模式**
+- 每个模式都带有 **玩法说明**
+- 多套主题配色可切换
+- 历史成绩自动保存
+- 成就系统增强可玩性
+- 手机端支持 **滑动控制方向**
+
+相比传统的“打开就玩”，这个版本更强调 **交互体验、视觉表现、项目完整度**，适合作为 GitHub 展示项目、学习 Canvas 动画项目，或前端练手作品。
+
+---
+
+## ✨ 功能亮点
+
+### 🎮 多种游戏模式
+- 🏁 **经典模式**：传统贪吃蛇，吃得越多速度越快
+- 🧱 **迷宫模式**：地图中加入障碍物，需要更谨慎走位
+- ⏱️ **限时模式**：在 60 秒内尽可能获得更高分数
+- 🌊 **无界模式**：撞墙不会死，会从另一侧出现
+- 🏃 **冲刺模式**：初始速度更快，更考验反应力
+
+### 🎨 视觉与交互
+- 多主题切换：翡翠 / 日落 / 海洋 / 霓虹 / 樱桃
+- 毛玻璃风格 UI 面板
+- 动态渐变背景与发光效果
+- 蛇头高光、眼睛朝向、食物脉冲动画
+- 模式卡片式选择，先了解玩法再进入游戏
+
+### 🏆 数据与成长
+- 本地排行榜（自动保存历史成绩）
+- 最高分显示
+- 成就解锁系统
+- 模式成绩记录
 
 ### 📱 多端适配
-- **键盘** — 方向键 + WASD
-- **触屏按钮** — 游戏中自动放大，触摸即时反馈
-- **滑动手势** — 在画布上滑动控制方向，支持连续转向
-- **响应式布局** — 桌面三栏 / 移动端自适应
+- 桌面端方向键 / WASD 控制
+- 手机端滑动控制
+- 触屏设备优化交互
+- 响应式布局
 
-### 💾 数据持久化
-- **排行榜** — 自动保存最近 10 局得分，按分数排序
-- **最高分记录** — 实时显示历史最佳，破纪录时弹出提示
-- **主题记忆** — 下次打开自动恢复上次选择的主题
-- **一键清空** — 支持清除所有历史记录
-
----
-
-## 🎨 主题预览
-
-| 翡翠 Emerald | 日落 Sunset | 海洋 Ocean | 霓虹 Neon | 樱桃 Cherry |
-|:---:|:---:|:---:|:---:|:---:|
-| 🟢 | 🟠 | 🔵 | 🟣 | 🔴 |
-| `#4CAF50` | `#ff9a44` | `#00d4ff` | `#b537f2` | `#ff4081` |
-| 经典绿 | 暖橙落日 | 深海蓝 | 赛博紫 | 粉红樱花 |
-
-> 点击控制面板顶部的彩色圆点即可切换主题，主题选择会自动保存到 `localStorage`。
+### 🔊 反馈机制
+- 吃食物、死亡、成就解锁音效
+- 静音开关
+- 部分设备支持振动反馈
 
 ---
 
-## 🎮 快速开始
+## 🖼️ 界面预览
 
-### 在线游玩
+> 你可以在这里放项目截图，例如：
 
-直接用浏览器打开 `index.html` 即可，无需任何构建工具或服务器。
-
-```bash
-# 克隆仓库
-git clone https://github.com/<your-username>/snake-game.git
-
-# 进入目录
-cd snake-game
-
-# 用浏览器打开（任选一种）
-open index.html          # macOS
-xdg-open index.html      # Linux
-start index.html         # Windows
+```md
+![首页预览](./screenshots/home.png)
+![游戏中](./screenshots/gameplay.png)
+![模式选择](./screenshots/modes.png)
