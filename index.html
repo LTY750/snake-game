@@ -104,14 +104,16 @@
         }
         .canvas-overlay .overlay-sub {
             font-size: 12px; color: rgba(255,255,255,0.5); letter-spacing: 1px;
+            text-align: center; padding: 0 16px;
         }
         @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
 
         .control-panel {
             padding: 20px; display: flex; flex-direction: column;
-            align-items: center; justify-content: space-between; min-width: 220px;
+            align-items: center; justify-content: flex-start; min-width: 260px;
+            max-width: 300px;
         }
-        .top-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+        .top-row { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; }
         .theme-picker { display: flex; gap: 6px; justify-content: center; }
         .theme-dot {
             width: 22px; height: 22px; border-radius: 50%; cursor: pointer;
@@ -133,20 +135,7 @@
         .mute-btn:hover { background: rgba(255,255,255,0.15); }
         .mute-btn.muted { opacity: 0.4; }
 
-        .mode-selector { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 12px; }
-        .mode-btn {
-            padding: 6px 10px; font-family: var(--font-mono); font-size: 11px;
-            font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.6);
-            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 10px; cursor: pointer; transition: all 0.2s; white-space: nowrap;
-        }
-        .mode-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
-        .mode-btn.active {
-            background: rgba(76,175,80,0.25); border-color: var(--accent);
-            color: var(--accent-light); box-shadow: 0 0 10px rgba(76,175,80,0.2);
-        }
-
-        .score-box { width: 100%; text-align: center; }
+        .score-box { width: 100%; text-align: center; margin-bottom: 14px; }
         .score-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.6); margin-bottom: 4px; font-family: var(--font-mono); }
         .score-value {
             font-family: var(--font-mono); font-size: 44px; font-weight: 900;
@@ -162,13 +151,66 @@
         .timer-display.warning { animation: timerBlink 0.5s infinite; }
         @keyframes timerBlink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
+        /* ==================== 模式卡片 ==================== */
+        .mode-section-title {
+            font-family: var(--font-mono); font-size: 11px;
+            color: rgba(255,255,255,0.5); letter-spacing: 2px;
+            margin-bottom: 8px; text-transform: uppercase;
+            transition: opacity 0.3s, max-height 0.4s, margin 0.3s;
+            max-height: 30px; overflow: hidden;
+        }
+        .mode-selector {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+            width: 100%; margin-bottom: 14px;
+            transition: opacity 0.3s, max-height 0.5s, margin 0.3s;
+            max-height: 600px; overflow: hidden;
+        }
+        body.playing .mode-selector,
+        body.playing .mode-section-title {
+            opacity: 0; max-height: 0; margin-bottom: 0; pointer-events: none;
+        }
+        .mode-btn {
+            display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+            padding: 10px 12px; font-family: var(--font-mono); text-align: left;
+            color: rgba(255,255,255,0.75);
+            background: rgba(255,255,255,0.05);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 12px; cursor: pointer;
+            transition: all 0.25s; position: relative; overflow: hidden;
+        }
+        .mode-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.25);
+            transform: translateY(-1px);
+        }
+        .mode-btn.active {
+            background: rgba(76,175,80,0.2);
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 16px rgba(76,175,80,0.3), inset 0 0 20px rgba(76,175,80,0.08);
+        }
+        .mode-btn.active::before {
+            content: '✓'; position: absolute; top: 6px; right: 8px;
+            font-size: 11px; color: var(--accent-light); font-weight: bold;
+        }
+        .mode-btn .mode-title {
+            font-size: 13px; font-weight: 700; letter-spacing: 1px;
+            display: flex; align-items: center; gap: 4px;
+        }
+        .mode-btn .mode-desc {
+            font-size: 10px; color: rgba(255,255,255,0.5);
+            line-height: 1.4; letter-spacing: 0.3px;
+        }
+        .mode-btn.active .mode-desc { color: rgba(255,255,255,0.75); }
+        .mode-btn:nth-child(5) { grid-column: 1 / -1; }
+
         .start-btn {
-            margin: 16px 0; padding: 12px 32px; font-family: var(--font-mono);
-            font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #fff;
+            margin: 4px 0 16px; padding: 14px 36px; font-family: var(--font-mono);
+            font-size: 14px; font-weight: 700; letter-spacing: 3px; color: #fff;
             background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             border: none; border-radius: 30px; cursor: pointer;
             box-shadow: 0 4px 20px rgba(76,175,80,0.4); transition: all 0.3s;
-            position: relative; overflow: hidden;
+            position: relative; overflow: hidden; width: 100%;
         }
         .start-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(76,175,80,0.6); }
         .start-btn:active { transform: translateY(0); }
@@ -215,7 +257,7 @@
         .history-header h3 { font-family: var(--font-mono); font-size: 14px; letter-spacing: 2px; display: flex; align-items: center; gap: 6px; }
         .clear-btn { font-size: 10px; padding: 5px 10px; background: rgba(255,107,107,0.2); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.4); border-radius: 20px; cursor: pointer; letter-spacing: 1px; transition: all 0.2s; font-family: var(--font-mono); }
         .clear-btn:hover { background: rgba(255,107,107,0.4); color: #fff; }
-        .history-list { list-style: none; flex: 1; overflow-y: auto; max-height: 360px; padding-right: 4px; }
+        .history-list { list-style: none; flex: 1; overflow-y: auto; max-height: 400px; padding-right: 4px; }
         .history-list::-webkit-scrollbar { width: 4px; }
         .history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
         .history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; margin-bottom: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; font-size: 12px; animation: slideIn 0.4s ease; }
@@ -254,9 +296,8 @@
             .game-title { font-size: 20px; }
             .snake-icon { width: 24px; height: 24px; }
             .score-value { font-size: 36px; }
-            .control-panel { min-width: auto; padding: 14px; }
-            .mode-btn { font-size: 10px; padding: 5px 8px; }
-            .history-panel { width: 100%; max-width: 340px; }
+            .control-panel { min-width: auto; max-width: 360px; padding: 14px; width: 100%; }
+            .history-panel { width: 100%; max-width: 360px; }
             body.playing .history-panel { display: none; }
             body.playing .control-btn { width: 64px; height: 64px; font-size: 24px; }
             body.playing .controls { width: 216px; }
@@ -266,9 +307,9 @@
         @media (max-width: 480px) {
             .game-container { gap: 12px; }
             .game-panel { padding: 12px; }
-            .control-panel { padding: 10px; }
-            .mode-selector { gap: 4px; }
-            .mode-btn { padding: 4px 6px; font-size: 9px; }
+            .control-panel { padding: 14px; }
+            .mode-selector { grid-template-columns: 1fr; }
+            .mode-btn:nth-child(5) { grid-column: auto; }
         }
     </style>
 </head>
@@ -287,8 +328,8 @@
             <div class="canvas-wrap">
                 <canvas id="gameCanvas" width="360" height="360"></canvas>
                 <div class="canvas-overlay show" id="overlay">
-                    <div class="overlay-main" id="overlayMain">点击开始游戏</div>
-                    <div class="overlay-sub" id="overlaySub"></div>
+                    <div class="overlay-main" id="overlayMain">🏁 经典</div>
+                    <div class="overlay-sub" id="overlaySub">选择喜欢的模式后点击 START</div>
                 </div>
                 <button class="pause-btn" id="pauseBtn">⏸</button>
             </div>
@@ -305,13 +346,7 @@
                 </div>
                 <button class="mute-btn" id="muteBtn" title="静音">🔊</button>
             </div>
-            <div class="mode-selector" id="modeSelector">
-                <button class="mode-btn active" data-mode="classic">🏁经典</button>
-                <button class="mode-btn" data-mode="maze">🧱迷宫</button>
-                <button class="mode-btn" data-mode="timed">⏱️限时</button>
-                <button class="mode-btn" data-mode="nowall">🌊无界</button>
-                <button class="mode-btn" data-mode="sprint">🏃冲刺</button>
-            </div>
+
             <div class="score-box">
                 <div class="score-label">SCORE</div>
                 <div class="score-value" id="score">0</div>
@@ -319,7 +354,33 @@
                 <div class="speed-indicator" id="speed">⚡ SPEED: 1.0x</div>
                 <div class="timer-display" id="timer" style="display:none"></div>
             </div>
+
+            <div class="mode-section-title">🎮 选择模式</div>
+            <div class="mode-selector" id="modeSelector">
+                <button class="mode-btn active" data-mode="classic">
+                    <span class="mode-title">🏁 经典</span>
+                    <span class="mode-desc">经典玩法，吃食物加速，撞墙或撞自己即结束</span>
+                </button>
+                <button class="mode-btn" data-mode="maze">
+                    <span class="mode-title">🧱 迷宫</span>
+                    <span class="mode-desc">地图中有障碍物，在有限空间中尽可能生存</span>
+                </button>
+                <button class="mode-btn" data-mode="timed">
+                    <span class="mode-title">⏱️ 限时</span>
+                    <span class="mode-desc">60秒内尽可能多吃，最后10秒红色预警</span>
+                </button>
+                <button class="mode-btn" data-mode="nowall">
+                    <span class="mode-title">🌊 无界</span>
+                    <span class="mode-desc">穿墙模式，只撞自己才会死，放松休闲</span>
+                </button>
+                <button class="mode-btn" data-mode="sprint">
+                    <span class="mode-title">🏃 冲刺</span>
+                    <span class="mode-desc">起始速度极快，加速更猛烈，挑战反应极限</span>
+                </button>
+            </div>
+
             <button class="start-btn" id="startBtn">START</button>
+
             <div class="controls">
                 <button id="up" class="control-btn">↑</button>
                 <button id="left" class="control-btn">←</button>
@@ -424,7 +485,7 @@
     const $achieveName = document.getElementById('achieveName');
     const $achieveDesc = document.getElementById('achieveDesc');
 
-    // ==================== 游戏状态（提前到顶部，避免 TDZ） ====================
+    // ==================== 游戏状态（提前避免 TDZ） ====================
     let snake = [{ x:10, y:10 }, { x:9, y:10 }, { x:8, y:10 }];
     let prevSnake = snake.map(s => ({...s}));
     let food = { x:15, y:10 };
@@ -441,7 +502,7 @@
     let swipeDirTime = 0;
     let swipeDirName = '';
 
-    // ==================== 离屏网格缓存（必须在 applyTheme 之前定义） ====================
+    // ==================== 离屏网格（必须在 applyTheme 前） ====================
     const gridCanvas = document.createElement('canvas');
     gridCanvas.width = gridCanvas.height = 360;
     const gridCtx = gridCanvas.getContext('2d');
@@ -511,6 +572,7 @@
         die()     { playTone(180, 0.4, 'sawtooth', 0.12); setTimeout(() => playTone(120, 0.3, 'sawtooth', 0.08), 150); },
         achieve() { [523,659,784,1047].forEach((f,i) => setTimeout(() => playTone(f, 0.18, 'sine', 0.12), i * 90)); },
         tick()    { playTone(600, 0.06, 'square', 0.08); },
+        select()  { playTone(440, 0.05, 'sine', 0.1); },
     };
 
     function vibrate(pattern) { if (navigator.vibrate) try { navigator.vibrate(pattern); } catch(e) {} }
@@ -611,12 +673,23 @@
     }
 
     // ==================== 模式选择 ====================
+    function updateOverlayForMode() {
+        const m = MODES[currentMode];
+        $overlayMain.textContent = `${m.icon} ${m.name}`;
+        $overlaySub.textContent = '点击 START 开始游戏';
+    }
+
     $modeSelector.addEventListener('click', e => {
         const btn = e.target.closest('.mode-btn');
         if (!btn || gameRunning) return;
+        if (btn.dataset.mode === currentMode) return;
         currentMode = btn.dataset.mode;
-        $modeSelector.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === currentMode));
-        $overlaySub.textContent = MODES[currentMode].desc;
+        $modeSelector.querySelectorAll('.mode-btn').forEach(b =>
+            b.classList.toggle('active', b.dataset.mode === currentMode)
+        );
+        updateOverlayForMode();
+        SFX.select();
+        vibrate(15);
     });
 
     // ==================== 初始化 ====================
@@ -721,7 +794,6 @@
 
         ctx.drawImage(gridCanvas, 0, 0);
 
-        // 障碍物
         for (const ob of obstacles) {
             const ox = ob.x * GRID, oy = ob.y * GRID;
             ctx.fillStyle = 'rgba(120,120,140,0.6)';
@@ -741,7 +813,6 @@
             ctx.strokeRect(1, 1, 358, 358);
         }
 
-        // 食物
         const fx = food.x * GRID + GRID / 2, fy = food.y * GRID + GRID / 2;
         const pulse = 1 + Math.sin(performance.now() / 200) * 0.1;
         const glow = ctx.createRadialGradient(fx, fy, 0, fx, fy, GRID * 1.5);
@@ -753,7 +824,6 @@
         ctx.fillStyle = grad; ctx.beginPath();
         ctx.arc(fx, fy, (GRID / 2 - 1) * pulse, 0, Math.PI * 2); ctx.fill();
 
-        // 蛇
         for (let i = snake.length - 1; i >= 0; i--) {
             const cur = snake[i], prev = prevSnake[i] || cur;
             let x = lerp(prev.x, cur.x, interp) * GRID;
@@ -794,7 +864,6 @@
             }
         }
 
-        // 滑动方向指示
         if (swipeDirName && performance.now() - swipeDirTime < 300) {
             const alpha = 1 - (performance.now() - swipeDirTime) / 300;
             ctx.globalAlpha = alpha * 0.4;
@@ -832,8 +901,9 @@
         checkAchievements();
 
         $startBtn.textContent = 'RESTART';
+        const m = MODES[currentMode];
         $overlayMain.textContent = `💀 得分 ${score}`;
-        $overlaySub.textContent = MODES[currentMode].desc;
+        $overlaySub.textContent = `${m.icon} ${m.name}｜可切换模式后重开`;
         $overlay.classList.add('show');
         document.body.classList.remove('playing');
         const isNewBest = addHistory(score);
@@ -860,7 +930,7 @@
     }
     $pauseBtn.addEventListener('click', togglePause);
 
-    // ==================== 限时模式计时器 ====================
+    // ==================== 限时计时器 ====================
     function startTimer() {
         clearInterval(timerInterval);
         timerInterval = setInterval(() => {
@@ -962,7 +1032,7 @@
     init();
     draw(0);
     renderHistory();
-    $overlaySub.textContent = MODES[currentMode].desc;
+    updateOverlayForMode();
     </script>
 </body>
 </html>
