@@ -90,11 +90,3 @@
 
 ---
 
-## 🖼️ 界面预览
-
-> 你可以在这里放项目截图，例如：
-
-```md
-![首页预览](./screenshots/home.png)
-![游戏中](./screenshots/gameplay.png)
-![模式选择](./screenshots/modes.png)
