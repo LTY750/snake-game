@@ -424,13 +424,72 @@
     const $achieveName = document.getElementById('achieveName');
     const $achieveDesc = document.getElementById('achieveDesc');
 
+    // ==================== 游戏状态（提前到顶部，避免 TDZ） ====================
+    let snake = [{ x:10, y:10 }, { x:9, y:10 }, { x:8, y:10 }];
+    let prevSnake = snake.map(s => ({...s}));
+    let food = { x:15, y:10 };
+    let dx = 1, dy = 0, nextDx = 1, nextDy = 0, score = 0;
+    let stepInterval = 200;
+    let gameRunning = false, lastStepTime = 0, animFrameId = null;
+    let paused = false;
+    let currentMode = 'classic';
+    let curFoodEaten = 0;
+    let obstacles = [];
+    const dirQueue = [];
+    let timeRemaining = 0;
+    let timerInterval = null;
+    let swipeDirTime = 0;
+    let swipeDirName = '';
+
+    // ==================== 离屏网格缓存（必须在 applyTheme 之前定义） ====================
+    const gridCanvas = document.createElement('canvas');
+    gridCanvas.width = gridCanvas.height = 360;
+    const gridCtx = gridCanvas.getContext('2d');
+
+    function renderGridCache() {
+        gridCtx.clearRect(0, 0, 360, 360);
+        gridCtx.strokeStyle = 'rgba(255,255,255,0.03)';
+        gridCtx.lineWidth = 1;
+        gridCtx.beginPath();
+        for (let i = 1; i < TILES; i++) {
+            gridCtx.moveTo(i * GRID, 0); gridCtx.lineTo(i * GRID, 360);
+            gridCtx.moveTo(0, i * GRID); gridCtx.lineTo(360, i * GRID);
+        }
+        gridCtx.stroke();
+    }
+
+    // ==================== 主题颜色缓存 ====================
+    let themeColors = {};
+
+    function refreshThemeColors() {
+        const st = getComputedStyle(document.body);
+        themeColors = {
+            accent: st.getPropertyValue('--accent').trim() || '#4CAF50',
+            accentLight: st.getPropertyValue('--accent-light').trim() || '#8BC34A',
+            accentDark: st.getPropertyValue('--accent-dark').trim() || '#2E7D32',
+            danger: st.getPropertyValue('--danger').trim() || '#ff6b6b',
+            canvas1: st.getPropertyValue('--canvas-1').trim() || '#0d1b2a',
+            canvas2: st.getPropertyValue('--canvas-2').trim() || '#1b263b',
+        };
+        renderGridCache();
+    }
+
+    function applyTheme(theme) {
+        document.body.dataset.theme = theme;
+        localStorage.setItem(THEME_KEY, theme);
+        $themePicker.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.dataset.theme === theme));
+        refreshThemeColors();
+    }
+    $themePicker.addEventListener('click', e => { const d = e.target.closest('.theme-dot'); if (d) applyTheme(d.dataset.theme); });
+    applyTheme(localStorage.getItem(THEME_KEY) || 'emerald');
+
     // ==================== 音效 ====================
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
     let muted = localStorage.getItem('snake_muted') === '1';
 
     function ensureAudio() {
-        if (audioCtx) return;
+        if (audioCtx || !AudioCtx) return;
         try { audioCtx = new AudioCtx(); } catch(e) {}
     }
 
@@ -454,11 +513,24 @@
         tick()    { playTone(600, 0.06, 'square', 0.08); },
     };
 
-    function vibrate(pattern) { if (navigator.vibrate) navigator.vibrate(pattern); }
+    function vibrate(pattern) { if (navigator.vibrate) try { navigator.vibrate(pattern); } catch(e) {} }
 
     function updateMuteUI() { $muteBtn.textContent = muted ? '🔇' : '🔊'; $muteBtn.classList.toggle('muted', muted); }
     $muteBtn.addEventListener('click', () => { muted = !muted; localStorage.setItem('snake_muted', muted ? '1' : '0'); updateMuteUI(); });
     updateMuteUI();
+
+    // ==================== 统计 ====================
+    function loadStats() { try { return JSON.parse(localStorage.getItem(STATS_KEY)) || {}; } catch { return {}; } }
+    function saveStats(s) { localStorage.setItem(STATS_KEY, JSON.stringify(s)); }
+
+    function recordGameEnd() {
+        const s = loadStats();
+        s.totalGames = (s.totalGames || 0) + 1;
+        s.totalFood = (s.totalFood || 0) + curFoodEaten;
+        const modeBestKey = currentMode + 'Best';
+        if (!s[modeBestKey] || score > s[modeBestKey]) s[modeBestKey] = score;
+        saveStats(s);
+    }
 
     // ==================== 成就 ====================
     const unlockedSet = new Set(JSON.parse(localStorage.getItem(ACHIEVE_KEY) || '[]'));
@@ -492,61 +564,6 @@
         for (const a of ACHIEVEMENTS) {
             if (!unlockedSet.has(a.id) && a.check(checkData)) unlockAchievement(a.id);
         }
-    }
-
-    // ==================== 统计 ====================
-    function loadStats() { try { return JSON.parse(localStorage.getItem(STATS_KEY)) || {}; } catch { return {}; } }
-    function saveStats(s) { localStorage.setItem(STATS_KEY, JSON.stringify(s)); }
-
-    function recordGameEnd() {
-        const s = loadStats();
-        s.totalGames = (s.totalGames || 0) + 1;
-        s.totalFood = (s.totalFood || 0) + curFoodEaten;
-        const modeBestKey = currentMode + 'Best';
-        if (!s[modeBestKey] || score > s[modeBestKey]) s[modeBestKey] = score;
-        saveStats(s);
-    }
-
-    // ==================== 主题颜色缓存 ====================
-    let themeColors = {};
-
-    function refreshThemeColors() {
-        const st = getComputedStyle(document.body);
-        themeColors = {
-            accent: st.getPropertyValue('--accent').trim() || '#4CAF50',
-            accentLight: st.getPropertyValue('--accent-light').trim() || '#8BC34A',
-            accentDark: st.getPropertyValue('--accent-dark').trim() || '#2E7D32',
-            danger: st.getPropertyValue('--danger').trim() || '#ff6b6b',
-            canvas1: st.getPropertyValue('--canvas-1').trim() || '#0d1b2a',
-            canvas2: st.getPropertyValue('--canvas-2').trim() || '#1b263b',
-        };
-        renderGridCache();
-    }
-
-    function applyTheme(theme) {
-        document.body.dataset.theme = theme;
-        localStorage.setItem(THEME_KEY, theme);
-        $themePicker.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.dataset.theme === theme));
-        refreshThemeColors();
-    }
-    $themePicker.addEventListener('click', e => { const d = e.target.closest('.theme-dot'); if (d) applyTheme(d.dataset.theme); });
-    applyTheme(localStorage.getItem(THEME_KEY) || 'emerald');
-
-    // ==================== 离屏网格缓存 ====================
-    const gridCanvas = document.createElement('canvas');
-    gridCanvas.width = gridCanvas.height = 360;
-    const gridCtx = gridCanvas.getContext('2d');
-
-    function renderGridCache() {
-        gridCtx.clearRect(0, 0, 360, 360);
-        gridCtx.strokeStyle = 'rgba(255,255,255,0.03)';
-        gridCtx.lineWidth = 1;
-        gridCtx.beginPath();
-        for (let i = 1; i < TILES; i++) {
-            gridCtx.moveTo(i * GRID, 0); gridCtx.lineTo(i * GRID, 360);
-            gridCtx.moveTo(0, i * GRID); gridCtx.lineTo(360, i * GRID);
-        }
-        gridCtx.stroke();
     }
 
     // ==================== Toast ====================
@@ -587,19 +604,6 @@
         $historyList.appendChild(frag);
     }
     $clearBtn.addEventListener('click', () => { if (confirm('确定要清空所有历史记录吗？')) { localStorage.removeItem(HISTORY_KEY); renderHistory(); showToast('记录已清空'); } });
-
-    // ==================== 游戏状态 ====================
-    let snake, prevSnake, food, dx, dy, nextDx, nextDy, score;
-    let stepInterval, gameRunning = false, lastStepTime = 0, animFrameId = null;
-    let paused = false;
-    let currentMode = 'classic';
-    let curFoodEaten = 0;
-    let obstacles = [];
-    const dirQueue = [];
-    let timeRemaining = 0;
-    let timerInterval = null;
-    let swipeDirTime = 0;
-    let swipeDirName = '';
 
     function updateSpeedIndicator() {
         const ratio = MODES[currentMode].stepInit / stepInterval;
@@ -901,8 +905,8 @@
 
     // ==================== 启动游戏 ====================
     function startGame() {
-        if (gameRunning && !paused) return;  // 防重入
-        if (animFrameId) cancelAnimationFrame(animFrameId);
+        if (gameRunning && !paused) return;
+        if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
         clearInterval(timerInterval);
         init();
         gameRunning = true; paused = false;
@@ -916,7 +920,6 @@
         animFrameId = requestAnimationFrame(loop);
     }
 
-    // 两个入口：START 按钮 + overlay 点击
     $startBtn.addEventListener('click', startGame);
     $overlay.addEventListener('click', startGame);
 
