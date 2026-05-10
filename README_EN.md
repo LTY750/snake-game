@@ -2,15 +2,13 @@
   <a href="README.md">🇨🇳 中文</a > | 🇺🇸 English
 </p >
 
-<div align="center">
+<h1 align="center">🐍 Snake Game</h1>
 
-<h1>🐍 Snake Game</h1>
-
-<p>
+<p align="center"
   A polished native Web Snake game built with HTML5 Canvas
 </p >
 
-###Built with **HTML5 Canvas + CSS3 + Vanilla JavaScript**
+Built with **HTML5 Canvas + CSS3 + Vanilla JavaScript**
 
 Supports:
 - Multiple game modes
