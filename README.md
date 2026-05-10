@@ -1,6 +1,7 @@
 <p align="right">
   🇨🇳 中文 | <a href="./README_EN.md">🇺🇸 English</a >
 </p >
+
 # 🐍 Snake Game
 
 ### 一个精致的原生 Web 贪吃蛇小游戏
