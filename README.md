@@ -2,23 +2,36 @@
   🇨🇳 中文 | <a href="./README_EN.md">🇺🇸 English</a >
 </p >
 
-<h1 align="center">🐍 Snake Game</h1>
+<div align="center">
 
-<p align="center">
+<h1>🐍 Snake Game</h1>
+
+<p>
   A polished native Web Snake game built with HTML5 Canvas
 </p >
 
-<p align="center">
+<p>
+  Supports multiple game modes, themes, leaderboard, achievements,
+  and mobile swipe controls
+</p >
+
+<p>
   <a href=" ">
-    < img src="https://img.shields.io/badge/Play-Online-success?style=for-the-badge">
+    < img src="https://img.shields.io/badge/Play-Online-success?style=for-the-badge" />
   </a >
 </p >
 
-<p align="center">
+<p>
   < img src="https://img.shields.io/badge/HTML5-Canvas-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+
   < img src="https://img.shields.io/badge/CSS3-UI-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
+
   < img src="https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+
+  < img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
 </p >
+
+</div>
 
 ### 一个精致的原生 Web 贪吃蛇小游戏
 
