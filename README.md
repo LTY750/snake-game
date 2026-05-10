@@ -1,3 +1,15 @@
+<!-- 语言切换 -->
+<div style="text-align: center; margin: 20px 0;">
+  <input type="radio" name="lang" id="lang-zh" checked hidden>
+  <label for="lang-zh" style="cursor:pointer; padding:6px 12px; border:1px solid #ccc; border-radius:4px; background:#f5f5f5; margin:0 4px; font-size:14px;">🇨🇳 中文</label>
+  
+  <input type="radio" name="lang" id="lang-en" hidden>
+  <label for="lang-en" style="cursor:pointer; padding:6px 12px; border:1px solid #ccc; border-radius:4px; background:#f5f5f5; margin:0 4px; font-size:14px;">🇬🇧 English</label>
+</div>
+
+<!-- 中文内容 -->
+<div class="zh-content">
+
 <div align="center">
 
 # 🐍 Snake Game
