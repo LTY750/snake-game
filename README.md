@@ -1,42 +1,38 @@
-<!-- 语言切换 -->
-<div style="text-align: center; margin: 20px 0;">
-  <input type="radio" name="lang" id="lang-zh" checked hidden>
-  <label for="lang-zh" style="cursor:pointer; padding:6px 12px; border:1px solid #ccc; border-radius:4px; background:#f5f5f5; margin:0 4px; font-size:14px;">🇨🇳 中文</label>
-  
-  <input type="radio" name="lang" id="lang-en" hidden>
-  <label for="lang-en" style="cursor:pointer; padding:6px 12px; border:1px solid #ccc; border-radius:4px; background:#f5f5f5; margin:0 4px; font-size:14px;">🇬🇧 English</label>
-</div>
 
-<!-- 中文内容 -->
-<div class="zh-content">
 
-<div align="center">
+
 
 # 🐍 Snake Game
 
 ### 一个精致的原生 Web 贪吃蛇小游戏
 
-基于 **HTML5 Canvas + CSS3 + Vanilla JavaScript** 构建  
+基于 **HTML5 Canvas + CSS3 + Vanilla JavaScript** 构建
 支持 **多模式玩法、主题切换、排行榜、成就系统、移动端滑动控制**
 
-<br>
 
-[🌐 在线体验](https://snake-game-emxwyrvk.edgeone.cool)
 
-<br>
+[🌐 在线体验](
+https://snake-game-emxwyrvk.edgeone.cool)
 
-![HTML5](https://img.shields.io/badge/HTML5-Canvas-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-UI-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-</div>
+
+![HTML5](
+https://img.shields.io/badge/HTML5-Canvas-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](
+https://img.shields.io/badge/CSS3-UI-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](
+https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![License](
+https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+
+
 
 ---
 
 ## 📖 项目简介
 
-这是一个用 **原生前端技术** 实现的贪吃蛇游戏项目。  
+这是一个用 **原生前端技术** 实现的贪吃蛇游戏项目。
 它不仅保留了经典玩法，还加入了更适合展示和体验的增强功能：
 
 - 进入页面先 **选择游戏模式**
@@ -111,7 +107,8 @@
 
 你可以直接访问下面的地址在线试玩：
 
-👉 **https://snake-game-emxwyrvk.edgeone.cool**
+👉 **
+https://snake-game-emxwyrvk.edgeone.cool**
 
 ---
 
@@ -167,23 +164,23 @@
 ## 🧠 模式说明
 
 ### 🏁 经典模式
-最标准的贪吃蛇玩法。  
+最标准的贪吃蛇玩法。
 每吃到一个食物就会加速，撞墙或撞到自己即结束。
 
 ### 🧱 迷宫模式
-地图内会出现障碍布局。  
+地图内会出现障碍布局。
 你不仅要避开自己，还要绕开地图障碍，容错率更低。
 
 ### ⏱️ 限时模式
-在固定 **60 秒** 内获取尽可能高的得分。  
+在固定 **60 秒** 内获取尽可能高的得分。
 最后 10 秒会进入紧张倒计时状态。
 
 ### 🌊 无界模式
-蛇可以从地图一侧穿到另一侧。  
+蛇可以从地图一侧穿到另一侧。
 这个模式中，墙不再致命，核心难点变成对蛇身的管理。
 
 ### 🏃 冲刺模式
-更快的初始速度和更强的加速节奏。  
+更快的初始速度和更强的加速节奏。
 适合想要挑战高强度操作的玩家。
 
 ---
@@ -191,22 +188,22 @@
 ## 🛠️ 技术栈
 
 - **HTML5**
-  - 页面结构
-  - Canvas 画布载体
+- 页面结构
+- Canvas 画布载体
 
 - **CSS3**
-  - 动态背景
-  - 毛玻璃效果
-  - 模式卡片 UI
-  - 响应式布局
-  - 动画与过渡
+- 动态背景
+- 毛玻璃效果
+- 模式卡片 UI
+- 响应式布局
+- 动画与过渡
 
 - **Vanilla JavaScript**
-  - 游戏逻辑
-  - 模式切换
-  - 动画循环
-  - 本地存储
-  - 音效与输入控制
+- 游戏逻辑
+- 模式切换
+- 动画循环
+- 本地存储
+- 音效与输入控制
 
 ---
 
@@ -251,5 +248,5 @@
 ```bash
 snake-game/
 │
-├── index.html      # 主文件（HTML + CSS + JS）
-└── README.md       # 项目说明文档
+├── index.html # 主文件（HTML + CSS + JS）
+└── README.md # 项目说明文档
