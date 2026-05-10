@@ -10,7 +10,7 @@
   A polished native Web Snake game built with HTML5 Canvas
 </p >
 
-Built with **HTML5 Canvas + CSS3 + Vanilla JavaScript**
+###Built with **HTML5 Canvas + CSS3 + Vanilla JavaScript**
 
 Supports:
 - Multiple game modes
