@@ -1,5 +1,5 @@
 <p align="right">
-  <a href=" ">🇨🇳 中文</a > | 🇺🇸 English
+  <a href="README.md">🇨🇳 中文</a > | 🇺🇸 English
 </p >
 
 # 🐍 Snake Game
